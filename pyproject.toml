@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mag-diffusion-pinn"
+version = "0.1.0"
+description = "Physics-informed neural networks for 1D resistive magnetic diffusion, validated against analytic and finite-difference baselines"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = ["numpy>=1.24", "scipy>=1.10", "matplotlib>=3.7", "torch>=2.1"]
+
+[project.optional-dependencies]
+dev = ["pytest>=7", "jupyter", "nbformat"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+markers = ["slow: tests that train for a few hundred steps (still under a minute)"]

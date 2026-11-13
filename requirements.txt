@@ -1,0 +1,7 @@
+# loose requirements; `pip install -e ".[dev]"` reads pyproject.toml, and requirements-lock.txt has exact versions
+numpy
+scipy
+matplotlib
+jupyter
+torch
+pytest

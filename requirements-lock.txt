@@ -1,0 +1,7 @@
+# versions used to produce the cached results and to run the tests (Python 3.13, Linux, CPU)
+numpy==2.5.3
+scipy==1.18.1
+matplotlib==3.11.2
+torch==2.15.0
+pytest==9.1.1
+nbformat==5.11.1
