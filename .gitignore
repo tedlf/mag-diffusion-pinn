@@ -7,3 +7,6 @@ __pycache__/
 .python-version
 build/
 dist/
+
+results/*.partial
+results/*.tmp
