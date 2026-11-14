@@ -3,11 +3,10 @@
 Usage (from the repository root, after `pip install -e .`):
     python scripts/reproduce_headlines.py
 
-No training happens here (that takes hours). The cached runs in results/ were produced by the code in
-notebooks/ and src/mag_diffusion_pinn/. To retrain a single run, see the README.
+No training happens here (that takes hours). The cached runs in results/ were produced by
+scripts/run_experiments.py (or the FORCE_RERUN flag in the notebooks); see the README to regenerate them.
 """
 import os
-import pickle
 import sys
 
 import numpy as np
@@ -15,20 +14,13 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
+from mag_diffusion_pinn.experiments import load_runs
 from mag_diffusion_pinn.inverse import crb_theta, make_probes
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RES = os.path.join(ROOT, "results")
 FIG = os.path.join(ROOT, "figures")
 THETA_TRUE = 0.6
-
-
-def load(*names):
-    out = {}
-    for n in names:
-        with open(os.path.join(RES, n + ".pkl"), "rb") as f:
-            out.update(pickle.load(f))
-    return out
 
 
 def stats(v):
@@ -38,8 +30,8 @@ def stats(v):
 
 def main():
     os.makedirs(FIG, exist_ok=True)
-    m2 = load("m2_runs")
-    runs = load("m3_A", "m3_R", *[f"m3b_{i}" for i in range(1, 8)])
+    m2 = load_runs("m2", RES)
+    runs = load_runs("m3", RES)
     rel = lambda prob, cfg, seeds: [runs[(prob, cfg, s)]["metrics"]["rel_l2"] for s in seeds]
     six = range(6)
 
@@ -56,7 +48,7 @@ def main():
     print(f"  R: hard vs plain median ratio = {np.median(series['R']['plain']) / np.median(series['R']['hard']):.0f}x")
     print(f"  A: plain vs hard median ratio = {np.median(plain_A) / np.median(series['A']['hard']):.1f}x")
 
-    inv = load("m4_0", "m4_1")
+    inv = load_runs("m4", RES)
     print("\nINVERSE PROBLEM: true theta = 0.6, PINN starts at 1.0")
     print(f"  noise-free (3 probes): theta = {inv[('p3', 0.0, 0)]['theta']:.5f}")
     xi, t = make_probes([0.2, 0.5, 0.8])
