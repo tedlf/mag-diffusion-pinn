@@ -29,6 +29,8 @@ All numbers are from the cached runs in `results/`; `python scripts/reproduce_he
 
 The tests check the analytic solutions against the PDE and each other, the finite-difference solvers (second-order convergence, agreement with the reference), the autograd residual on a manufactured solution, the hard-constraint boundary conditions, short training runs for each PINN option, the inverse tools (least squares recovers θ, its scatter matches the Cramér–Rao bound), the experiment runner (resume after interruption, atomic replacement, parallel workers) and short versions of every experiment job, and that the cached results contain the numbers quoted above (exact numbers, and wider qualitative bounds that also hold after regenerating). `requirements-lock.txt` lists the exact package versions the tests and cached runs were produced with.
 
+The code runs on the CPU only and never uses a GPU. If PyTorch prints a CUDA warning (for example, that your GPU's compute capability is not supported by the installed build), it is harmless and the tests still pass. To silence it, either install the CPU-only build of PyTorch, `pip install torch==<version in requirements-lock.txt> --index-url https://download.pytorch.org/whl/cpu`, or hide the GPU by setting the environment variable `CUDA_VISIBLE_DEVICES=""`.
+
 ## Reproduce
 
     python scripts/reproduce_headlines.py     # prints the headline numbers, writes figures/*.png (no training)
